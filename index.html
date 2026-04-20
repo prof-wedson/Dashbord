@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Dashboard Obra Wedson</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#f0f2f5;color:#333;min-height:100vh}
+
+header{background:linear-gradient(135deg,#1a3a5c,#2e6da4);color:#fff;padding:22px 32px}
+header h1{font-size:1.5rem;font-weight:700}
+header p{font-size:.85rem;opacity:.75;margin-top:4px}
+
+.wrap{max-width:1280px;margin:0 auto;padding:24px 18px}
+
+/* KPI */
+.kpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:22px}
+.kpi-card{background:#fff;border-radius:10px;padding:18px 16px;box-shadow:0 2px 8px rgba(0,0,0,.08);border-left:4px solid var(--c)}
+.kpi-card .lbl{font-size:.7rem;text-transform:uppercase;letter-spacing:.6px;color:#999;margin-bottom:6px}
+.kpi-card .val{font-size:1.45rem;font-weight:700;color:var(--c)}
+.kpi-card .sub{font-size:.7rem;color:#bbb;margin-top:3px}
+
+/* Cards genéricos */
+.card{background:#fff;border-radius:10px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.08);margin-bottom:18px}
+.card h2{font-size:.88rem;font-weight:600;color:#555;text-transform:uppercase;letter-spacing:.5px;padding-bottom:10px;border-bottom:1px solid #eee;margin-bottom:16px}
+
+/* Grid 2 colunas */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px}
+.grid3-1{display:grid;grid-template-columns:2fr 1fr;gap:18px;margin-bottom:18px}
+
+/* ── CSS BAR CHART ── */
+.bar-chart{display:flex;flex-direction:column;gap:10px}
+.bar-row{display:flex;align-items:center;gap:10px;font-size:.78rem}
+.bar-row .bar-lbl{width:70px;text-align:right;color:#666;flex-shrink:0}
+.bar-row .bar-lbl.wide{width:130px}
+.bar-track{flex:1;background:#f0f2f5;border-radius:4px;height:22px;position:relative;overflow:hidden}
+.bar-fill{height:100%;border-radius:4px;display:flex;align-items:center;padding-left:8px;font-size:.72rem;font-weight:600;color:#fff;white-space:nowrap;transition:width .6s ease}
+.bar-val{margin-left:8px;font-size:.75rem;color:#555;flex-shrink:0;min-width:80px}
+
+/* ── DONUT ── */
+.donut-wrap{display:flex;flex-direction:column;align-items:center;gap:20px}
+.donut{width:180px;height:180px;border-radius:50%;background:conic-gradient(
+  #e67e22 0% 35.3%,
+  #27ae60 35.3% 40.9%,
+  #8e44ad 40.9% 100%
+);display:flex;align-items:center;justify-content:center;position:relative}
+.donut-hole{width:100px;height:100px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center}
+.donut-hole .tot{font-size:.65rem;color:#999;text-transform:uppercase}
+.donut-hole .amt{font-size:.95rem;font-weight:700;color:#333}
+.legend{list-style:none;font-size:.8rem;width:100%}
+.legend li{display:flex;align-items:center;gap:8px;padding:4px 0;color:#555}
+.dot{width:12px;height:12px;border-radius:50%;flex-shrink:0}
+
+/* ── TABLE ── */
+table{width:100%;border-collapse:collapse;font-size:.82rem}
+thead th{background:#f5f7fa;text-align:left;padding:8px 10px;font-size:.7rem;text-transform:uppercase;letter-spacing:.4px;color:#888;border-bottom:2px solid #e8eaed}
+tbody tr:hover{background:#fafbfc}
+tbody td{padding:7px 10px;border-bottom:1px solid #f2f2f2;vertical-align:middle}
+
+.badge{display:inline-block;padding:2px 8px;border-radius:12px;font-size:.68rem;font-weight:600}
+.ok{background:#e6f4ea;color:#1e7e34}
+.pend{background:#fff3cd;color:#856404}
+.miss{background:#fde8e8;color:#c0392b}
+.wait{background:#e8f4fd;color:#1a5276}
+
+/* pending list */
+.pend-list{list-style:none}
+.pend-list li{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #f2f2f2;font-size:.82rem}
+.pend-list li:last-child{border-bottom:none}
+
+@media(max-width:700px){
+  .grid2,.grid3-1{grid-template-columns:1fr}
+  .bar-row .bar-lbl.wide{width:90px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Dashboard — Obra Wedson</h1>
+  <p>Controle financeiro · Atualizado em 20/04/2026</p>
+</header>
+
+<div class="wrap">
+
+  <!-- KPIs -->
+  <div class="kpi">
+    <div class="kpi-card" style="--c:#2e6da4">
+      <div class="lbl">Total Gasto</div>
+      <div class="val">R$&nbsp;351.466</div>
+      <div class="sub">Mão de obra + Material</div>
+    </div>
+    <div class="kpi-card" style="--c:#e67e22">
+      <div class="lbl">Mão de Obra Principal</div>
+      <div class="val">R$&nbsp;123.620</div>
+      <div class="sub">41 semanas pagas</div>
+    </div>
+    <div class="kpi-card" style="--c:#27ae60">
+      <div class="lbl">Serviços Especializados</div>
+      <div class="val">R$&nbsp;19.583</div>
+      <div class="sub">Hidráulica, Elétrica, A/C…</div>
+    </div>
+    <div class="kpi-card" style="--c:#8e44ad">
+      <div class="lbl">Material</div>
+      <div class="val">R$&nbsp;208.263</div>
+      <div class="sub">18 categorias</div>
+    </div>
+    <div class="kpi-card" style="--c:#c0392b">
+      <div class="lbl">Itens Pendentes</div>
+      <div class="val">7</div>
+      <div class="sub">Sem valor ou falta pagar</div>
+    </div>
+  </div>
+
+  <!-- Gráfico mensal + Donut -->
+  <div class="grid3-1">
+    <div class="card">
+      <h2>Mão de Obra Principal — Gasto Mensal</h2>
+      <div class="bar-chart" id="monthly"></div>
+    </div>
+    <div class="card">
+      <h2>Distribuição dos Custos</h2>
+      <div class="donut-wrap">
+        <div class="donut">
+          <div class="donut-hole">
+            <span class="tot">Total</span>
+            <span class="amt">R$351k</span>
+          </div>
+        </div>
+        <ul class="legend">
+          <li><span class="dot" style="background:#e67e22"></span><b>35,2%</b> &nbsp;Mão de Obra (R$123.620)</li>
+          <li><span class="dot" style="background:#27ae60"></span><b>5,6%</b> &nbsp;Serviços Espec. (R$19.583)</li>
+          <li><span class="dot" style="background:#8e44ad"></span><b>59,3%</b> &nbsp;Material (R$208.263)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Gráfico de material -->
+  <div class="card">
+    <h2>Material — Valor por Categoria</h2>
+    <div class="bar-chart" id="material"></div>
+  </div>
+
+  <!-- Tabelas -->
+  <div class="grid2">
+    <div class="card">
+      <h2>Material por Fornecedor</h2>
+      <table>
+        <thead><tr><th>Tipo</th><th>Fornecedor</th><th>Valor</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>Lajes</td><td>Cantieri</td><td>R$55.850,00</td><td><span class="badge ok">Pago</span></td></tr>
+          <tr><td>Ferragem</td><td>Claudio</td><td>R$51.057,00</td><td><span class="badge ok">Pago</span></td></tr>
+          <tr><td>Telhado</td><td>Lucin</td><td>R$24.000,00</td><td><span class="badge pend">Falta metade</span></td></tr>
+          <tr><td>Areia</td><td>Natalino</td><td>R$21.400,00</td><td><span class="badge ok">Pago</span></td></tr>
+          <tr><td>Portão</td><td>Lucin</td><td>R$11.000,00</td><td><span class="badge pend">Falta metade</span></td></tr>
+          <tr><td>Piscina</td><td>Azul Vinil</td><td>R$11.000,00</td><td><span class="badge pend">Falta metade</span></td></tr>
+          <tr><td>Madeira</td><td>Madelei</td><td>R$5.555,00</td><td><span class="badge ok">Pago</span></td></tr>
+          <tr><td>Hidráulica</td><td>Casa Real</td><td>R$5.546,79</td><td><span class="badge pend">Falta cano</span></td></tr>
+          <tr><td>Areia</td><td>Seu Luiz</td><td>R$4.700,00</td><td><span class="badge ok">Pago</span></td></tr>
+          <tr><td>Escora</td><td>Evânio</td><td>R$4.144,00</td><td><span class="badge ok">Pago</span></td></tr>
+          <tr><td>Brita</td><td>CMP</td><td>R$3.971,00</td><td><span class="badge ok">Pago</span></td></tr>
+          <tr><td>Madeira</td><td>Serra Verde</td><td>R$2.654,00</td><td><span class="badge ok">Pago</span></td></tr>
+          <tr><td>Calha</td><td>Cleiton</td><td>R$2.500,00</td><td><span class="badge miss">Falta pagar</span></td></tr>
+          <tr><td>Elétrica</td><td>Sist Eletrico</td><td>R$2.666,80</td><td><span class="badge pend">Falta conduite</span></td></tr>
+          <tr><td>Vedação</td><td>Só Tintas</td><td>R$1.825,00</td><td><span class="badge ok">Pago</span></td></tr>
+          <tr><td>Ferramenta</td><td>Mult Parafuso</td><td>R$393,00</td><td><span class="badge pend">Falta arame</span></td></tr>
+          <tr><td>Tijolo</td><td>Renato</td><td>—</td><td><span class="badge miss">Sem valor</span></td></tr>
+          <tr><td>Cimento/Cal</td><td>Cimercal</td><td>—</td><td><span class="badge miss">Sem valor</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>Serviços Especializados</h2>
+      <table>
+        <thead><tr><th>Serviço</th><th>Total Pago</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>Obra Principal (Wedson)</td><td>R$123.620,00</td><td><span class="badge ok">Em andamento</span></td></tr>
+          <tr><td>Container + Betoneira</td><td>R$6.780,00</td><td><span class="badge ok">Pago</span></td></tr>
+          <tr><td>Ar Condicionado (Moises)</td><td>R$4.000,00</td><td><span class="badge ok">Pago</span></td></tr>
+          <tr><td>Máquina</td><td>R$5.725,00</td><td><span class="badge ok">Pago</span></td></tr>
+          <tr><td>Buraco (Urias)</td><td>R$3.928,00</td><td><span class="badge ok">Pago</span></td></tr>
+          <tr><td>Andaime (WA)</td><td>R$2.000,00</td><td><span class="badge ok">Pago</span></td></tr>
+          <tr><td>Hidráulica</td><td>R$1.950,00</td><td><span class="badge ok">Pago</span></td></tr>
+          <tr><td>Elétrica (Fernando)</td><td>R$980,00</td><td><span class="badge ok">Pago</span></td></tr>
+          <tr><td>Manta (Jorge)</td><td>R$0,00</td><td><span class="badge wait">Aguardando</span></td></tr>
+        </tbody>
+      </table>
+
+      <br/>
+      <h2>Pendências Financeiras</h2>
+      <ul class="pend-list">
+        <li><span>Tijolo (Renato)</span><span class="badge miss">Sem valor</span></li>
+        <li><span>Cimento/Cal (Cimercal)</span><span class="badge miss">Sem valor</span></li>
+        <li><span>Portão — Lucin</span><span class="badge pend">Falta ~R$11.000</span></li>
+        <li><span>Telhado — Lucin</span><span class="badge pend">Falta ~R$24.000</span></li>
+        <li><span>Piscina — Azul Vinil</span><span class="badge pend">Falta ~R$11.000</span></li>
+        <li><span>Calha — Cleiton</span><span class="badge miss">Falta R$2.500</span></li>
+        <li><span>Manta — Jorge</span><span class="badge wait">Aguardando</span></li>
+      </ul>
+    </div>
+  </div>
+
+</div><!-- /wrap -->
+
+<script>
+// ── Dados mensais ─────────────────────────────────────────────────────
+const monthly = [
+  {lbl:'Jul/25', val:8870},
+  {lbl:'Ago/25', val:16350},
+  {lbl:'Set/25', val:10900},
+  {lbl:'Out/25', val:11800},
+  {lbl:'Nov/25', val:9800},
+  {lbl:'Dez/25', val:13800},
+  {lbl:'Jan/26', val:10200},
+  {lbl:'Fev/26', val:14800},
+  {lbl:'Mar/26', val:16400},
+  {lbl:'Abr/26', val:11700},
+];
+
+const material = [
+  {lbl:'Lajes',        val:55850},
+  {lbl:'Ferragem',     val:51057},
+  {lbl:'Telhado',      val:24000},
+  {lbl:'Areia (Nat.)', val:21400},
+  {lbl:'Portão',       val:11000},
+  {lbl:'Piscina',      val:11000},
+  {lbl:'Madeira (M.)', val:5555},
+  {lbl:'Hidráulica',   val:5546.79},
+  {lbl:'Areia (Luiz)', val:4700},
+  {lbl:'Escora',       val:4144},
+  {lbl:'Brita',        val:3971},
+  {lbl:'Madeira (SV)', val:2654},
+  {lbl:'Elétrica',     val:2666.80},
+  {lbl:'Calha',        val:2500},
+  {lbl:'Vedação',      val:1825},
+  {lbl:'Ferramenta',   val:393},
+];
+
+function fmt(v){
+  return 'R$\u00a0' + v.toLocaleString('pt-BR',{minimumFractionDigits:0,maximumFractionDigits:0});
+}
+
+function renderBars(containerId, rows, color, labelClass=''){
+  const max = Math.max(...rows.map(r=>r.val));
+  const el = document.getElementById(containerId);
+  el.innerHTML = rows.map(r => {
+    const pct = (r.val / max * 100).toFixed(1);
+    return `<div class="bar-row">
+      <span class="bar-lbl ${labelClass}">${r.lbl}</span>
+      <div class="bar-track">
+        <div class="bar-fill" style="width:${pct}%;background:${color}">${pct}%</div>
+      </div>
+      <span class="bar-val">${fmt(r.val)}</span>
+    </div>`;
+  }).join('');
+}
+
+renderBars('monthly',  monthly,  '#2e6da4');
+renderBars('material', material, '#8e44ad', 'wide');
+</script>
+</body>
+</html>
